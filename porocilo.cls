@@ -30,6 +30,9 @@
 
 % Custom universal commands
 \newcommand{\dd}{\mathrm{d}}
+\newcommand{\Dd}[3][{}]{\frac{\dd^{#1} #2}{\dd#3^{#1}}}
+\newcommand{\pd}{\partial}
+\newcommand{\Pd}[3][{}]{\frac{\pd^{#1} #2}{\pd #3^{#1}}}
 
 % Define new commands for the title page
 \newcommand{\institutionlogo}[1]{\def\@institutionlogo{#1}}
@@ -79,19 +82,21 @@
 
 % Command for multiple figures in a row
 % example usage:
-% \begin{multifig}{2}{Overall caption}{0.45}
+% \begin{multifig}{2}{Overall caption}{0.45}{label}
 %   \subfig{image1}{Subcaption 1}{label1}
 %   \subfig{image2}{Subcaption 2}{label2}
 % \end{multifig}
-% Arguments: {number of columns}{overall caption}{subfigure width}
-\newenvironment{multifig}[3]{%
+% Arguments: {number of columns}{overall caption}{subfigure width}{label}
+\newenvironment{multifig}[4]{%
     \begin{figure}[htbp]
         \centering
         \def\numcols{#1}
         \def\subfigwidth{#3}
         \def\multifigcaption{#2}
+        \def\multifiglabel{#4}
 }{%
         \caption{\multifigcaption}
+        \label{fig:\multifiglabel}
     \end{figure}
 }
 
@@ -105,6 +110,18 @@
         \label{fig:#3}
     \end{subfigure}%
     \hfill
+}
+
+% Custom command for inserting single .tex diagrams
+% example usage: \insertfig{file}{caption}{label}
+% Arguments: {file}{caption}{label}
+\newcommand{\insertdiag}[3]{%
+    \begin{figure}[htbp]
+        \centering
+        \include{#1}
+        \caption{#2}
+        \label{fig:#3}
+    \end{figure}
 }
 
 % Define class options
