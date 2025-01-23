@@ -1,18 +1,16 @@
-% Required packages
-\usepackage{amsmath}
-\usepackage{multirow}
-\usepackage{microtype}
-\usepackage{subcaption}
-\usepackage{booktabs}
-\usepackage{siunitx}
+% LaTeX preamble for matplotlib
+\usepackage{mathptmx}     % Times-like font for text and math
+\usepackage{amsmath}      % Math environments
+\usepackage{amssymb}      % Math symbols
+\usepackage{siunitx}      % Scientific units and number formatting
 \sisetup{output-decimal-marker = {,}}
-\usepackage{graphicx}
+\usepackage{graphicx}     % Images and figures
+\usepackage[slovene]{babel} % Slovene language support
 
-% Slovene language support
-\usepackage[slovene]{babel}
-
-% Custom universal commands
+% Custom math commands
 \newcommand{\dd}{\mathrm{d}}
 \newcommand{\Dd}[3][{}]{\frac{\dd^{#1} #2}{\dd#3^{#1}}}
 \newcommand{\pd}{\partial}
 \newcommand{\Pd}[3][{}]{\frac{\pd^{#1} #2}{\pd#3^{#1}}}
+\newcommand{\ii}{\mathrm{i}}
+\newcommand{\pa}[1]{\left(#1\right)}

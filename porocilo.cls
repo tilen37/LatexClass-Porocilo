@@ -1,38 +1,54 @@
-% porocilo.cls
 \NeedsTeXFormat{LaTeX2e}
-\ProvidesClass{porocilo}[Latex class for reports]
+\ProvidesClass{porocilo}[Latex class for reports, arXiv compatible]
 
 % Base this class on article
-\LoadClass[12pt]{article}
+\LoadClass[11pt]{article}
+
 
 % Required packages
-\RequirePackage[utf8]{inputenc}
-\RequirePackage[T1]{fontenc}
-\RequirePackage{amsmath}
-\RequirePackage{amsfonts}
-\RequirePackage{amssymb}
-\RequirePackage{graphicx}
-\RequirePackage[left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm]{geometry}
-\RequirePackage{hyperref}
+\RequirePackage[utf8]{inputenc}        % UTF-8 encoding
+\RequirePackage[T1]{fontenc}           % Proper font encoding
+\RequirePackage{mathptmx}              % Times-like font for text and math
+\RequirePackage{amsmath}               % Math environments
+\RequirePackage{amssymb}               % Math symbols
+\RequirePackage{graphicx}              % Figures and images
+\RequirePackage[slovene]{babel}        % Slovene language support
+\RequirePackage{fancyhdr}              % Header and footer customization
+\RequirePackage{hyperref}              % Hyperlinks
+\RequirePackage{siunitx}               % Scientific units and number formatting
+\RequirePackage{geometry}              % Document dimensions
 
-\RequirePackage{amsmath}
-\RequirePackage{multirow}
-\RequirePackage{microtype}
-\RequirePackage{subcaption}
-\RequirePackage{booktabs}
-\usepackage{hyperref}
-\RequirePackage{siunitx}
-\sisetup{output-decimal-marker = {,}}
-\RequirePackage{graphicx}
+% Set comma as decimal marker
+\sisetup{output-decimal-marker = {,}}  
 
-% Slovene language support
-\RequirePackage[slovene]{babel}
+% Configure hyperref for arXiv
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=cyan,
+    pdftitle={Report},
+    pdfauthor={Author},
+    pdfsubject={Subject},
+    pdfkeywords={Keywords},
+    hidelinks
+}
+
+% Configure geometry
+\geometry{
+    left=2.5cm,
+    right=2.5cm,
+    top=2.5cm,
+    bottom=2.5cm
+}
 
 % Custom universal commands
 \newcommand{\dd}{\mathrm{d}}
 \newcommand{\Dd}[3][{}]{\frac{\dd^{#1} #2}{\dd#3^{#1}}}
 \newcommand{\pd}{\partial}
 \newcommand{\Pd}[3][{}]{\frac{\pd^{#1} #2}{\pd #3^{#1}}}
+\newcommand{\ii}{\mathrm{i}}
+\newcommand{\pa}[1]{\left(#1\right)}
 
 % Define new commands for the title page
 \newcommand{\institutionlogo}[1]{\def\@institutionlogo{#1}}
@@ -48,31 +64,27 @@
 \authorname{Author Name}
 \instructions{Instructions}
 
+
+% Header configuration
+\fancypagestyle{standard}{
+    % \fancyhf{} % Clear all header and footer fields
+    \lhead{\@authorname} % Left header
+    \rhead{\@projecttitle} % Right header
+    \renewcommand{\headrulewidth}{0.4pt} % Header rule
+    \renewcommand{\footrulewidth}{0pt}   % No footer rule
+}
+\pagestyle{standard}  % This ensures the header is applied throughout the document
+\setlength{\headheight}{13.92pt} % Set header height
+\addtolength{\topmargin}{-1.92pt} % Compensate for increased header height
+
 % Set default parameters
 \setlength\parindent{0pt}
 \setlength{\parskip}{\baselineskip}
 \pagenumbering{arabic}
 
-% Cusom figure environment
-% Additional packages for better figures
-\RequirePackage{float}
-\RequirePackage{caption}
-\RequirePackage{subcaption}
-
-% Configure captions
-\captionsetup{
-    font=small,
-    labelfont=bf,
-    format=plain,
-    justification=centering,
-    margin=10pt
-}
-
 % Custom command for inserting single figures
-% example usage: \insertfig{image}{caption}{label}
-% Arguments: [width]{image}{caption}{label}
 \newcommand{\insertfig}[4][0.8]{%
-    \begin{figure}[htbp]
+    \begin{figure}[ht]
         \centering
         \includegraphics[width=#1\textwidth]{#2}
         \caption{#3}
@@ -80,45 +92,11 @@
     \end{figure}
 }
 
-% Command for multiple figures in a row
-% example usage:
-% \begin{multifig}{2}{Overall caption}{0.45}{label}
-%   \subfig{image1}{Subcaption 1}{label1}
-%   \subfig{image2}{Subcaption 2}{label2}
-% \end{multifig}
-% Arguments: {number of columns}{overall caption}{subfigure width}{label}
-\newenvironment{multifig}[4]{%
-    \begin{figure}[htbp]
-        \centering
-        \def\numcols{#1}
-        \def\subfigwidth{#3}
-        \def\multifigcaption{#2}
-        \def\multifiglabel{#4}
-}{%
-        \caption{\multifigcaption}
-        \label{fig:\multifiglabel}
-    \end{figure}
-}
-
-% Command for adding a subfigure within multifig
-% Arguments: {image}{subcaption}{label}
-\newcommand{\subfig}[3]{%
-    \begin{subfigure}[b]{\subfigwidth\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{#1}
-        \caption{#2}
-        \label{fig:#3}
-    \end{subfigure}%
-    \hfill
-}
-
-% Custom command for inserting single .tex diagrams
-% example usage: \insertfig{file}{caption}{label}
-% Arguments: {file}{caption}{label}
+% Command for inserting a TikZ or .tex diagram
 \newcommand{\insertdiag}[3]{%
-    \begin{figure}[htbp]
+    \begin{figure}[ht]
         \centering
-        \include{#1}
+        \input{#1}
         \caption{#2}
         \label{fig:#3}
     \end{figure}
@@ -126,7 +104,6 @@
 
 % Define class options
 % Option to disable table of contents
-% Usage: \documentclass[notoc]{porocilo}
 \newif\ifnotoc
 \DeclareOption{notoc}{\notoctrue}
 \ProcessOptions\relax
